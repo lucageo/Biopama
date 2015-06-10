@@ -86,6 +86,25 @@ class TopicCategory(models.Model):
     class Meta:
         ordering = ("identifier",)
         verbose_name_plural = 'Metadata Topic Categories'
+
+class ProtectedArea(models.Model):
+    """
+    Metadata about high-level geographic data thematic classification.
+    It should reflect a list of codes from TC211
+    See: http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml
+    <CodeListDictionary gml:id="MD_MD_TopicCategoryCode">
+    """
+    identifier = models.CharField(max_length=255, default='pa name')
+    description = models.TextField(default='')
+    gn_description = models.TextField('GeoNode description', default='', null=True)
+    is_choice = models.BooleanField(default=True)
+
+    def __unicode__(self):
+        return u"{0}".format(self.gn_description)
+
+    class Meta:
+        ordering = ("identifier",)
+        verbose_name_plural = 'Protected Areas'
 		
 
 class SpatialRepresentationType(models.Model):
@@ -225,6 +244,7 @@ class ResourceBase(PolymorphicModel, PermissionLevelMixin):
     language_help_text = _('language used within the dataset')
     category_help_text = _('high-level geographic data thematic classification to assist in the grouping and search of '
                            'available geographic data sets.')
+    pa_help_text = _('select a protected area.')
     spatial_representation_type_help_text = _('method used to represent geographic information in the dataset.')
     temporal_extent_start_help_text = _('time period covered by the content of the dataset (start)')
     temporal_extent_end_help_text = _('time period covered by the content of the dataset (end)')
@@ -266,6 +286,8 @@ class ResourceBase(PolymorphicModel, PermissionLevelMixin):
     category = models.ForeignKey(TopicCategory, null=True, blank=True, limit_choices_to=Q(is_choice=True),
                                  help_text=category_help_text)
 								 
+    protected_area = models.ForeignKey(ProtectedArea, null=True, blank=True, limit_choices_to=Q(is_choice=True),
+                                 help_text=pa_help_text)
     spatial_representation_type = models.ForeignKey(SpatialRepresentationType, null=True, blank=True,
                                                     limit_choices_to=Q(is_choice=True),
                                                     help_text=spatial_representation_type_help_text)
