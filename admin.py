@@ -4,7 +4,7 @@ from django.conf import settings
 import autocomplete_light
 from modeltranslation.admin import TranslationAdmin
 
-from geonode.base.models import (TopicCategory, SpatialRepresentationType, Region, RestrictionCodeType,
+from geonode.base.models import (TopicCategory, ProtectedArea, SpatialRepresentationType, Region, RestrictionCodeType,
                                  ContactRole, ResourceBase, Link, License)
 
 
@@ -55,6 +55,12 @@ class TopicCategoryAdmin(MediaTranslationAdmin):
             return True
         else:
             return False
+class ProtectedAreaAdmin(MediaTranslationAdmin):
+    model = ProtectedArea
+    list_display_links = ('identifier',)
+    list_display = ('identifier', 'description', 'gn_description', 'is_choice')
+    if settings.MODIFY_TOPICCATEGORY is False:
+        exclude = ('identifier', 'description',)
 
 class RegionAdmin(MediaTranslationAdmin):
     model = Region
@@ -109,6 +115,7 @@ class LinkAdmin(admin.ModelAdmin):
     form = autocomplete_light.modelform_factory(Link)
 
 admin.site.register(TopicCategory, TopicCategoryAdmin)
+admin.site.register(ProtectedArea, ProtectedAreaAdmin)
 admin.site.register(Region, RegionAdmin)
 admin.site.register(SpatialRepresentationType, SpatialRepresentationTypeAdmin)
 admin.site.register(RestrictionCodeType, RestrictionCodeTypeAdmin)
