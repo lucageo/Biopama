@@ -249,6 +249,11 @@
          <gmd:MD_TopicCategoryCode>{{layer.category.identifier}}</gmd:MD_TopicCategoryCode>
          {% endif %}
        </gmd:topicCategory>
+       <gmd:ProtectedArea {% if not layer.protected_area %}gco:nilReason="missing"{% endif %}>
+         {% if layer.protected_area %}
+         <gmd:MD_ProtectedAreaCode>{{layer.protected_area.identifier}}</gmd:MD_ProtectedAreaCode>
+         {% endif %}
+       </gmd:ProtectedArea>
        <gmd:extent>
          <gmd:EX_Extent>
            <gmd:geographicElement>
