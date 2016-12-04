@@ -50,7 +50,7 @@ class TopicCategoryAdmin(MediaTranslationAdmin):
             return False
 
     def has_delete_permission(self, request, obj=None):
-        # the records are from the standard TC 211 list, so no way to remove
+        # the records are from the standard TC 211 list, so no way to remove_
         if settings.MODIFY_TOPICCATEGORY:
             return True
         else:
